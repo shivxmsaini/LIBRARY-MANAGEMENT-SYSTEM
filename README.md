@@ -1,1 +1,130 @@
 # LIBRARY-MANAGEMENT-SYSTEM
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Book {
+private:
+    int bookID;
+    string title;
+    string author;
+
+public:
+    Book(int id, string t, string a) {
+        bookID = id;
+        title = t;
+        author = a;
+    }
+
+    int getBookID() const {
+        return bookID;
+    }
+
+    void displayBook() const {
+        cout << "Book ID: " << bookID << endl;
+        cout << "Title  : " << title << endl;
+        cout << "Author : " << author << endl;
+        cout << "----------------------" << endl;
+    }
+};
+
+class Library {
+private:
+    vector<Book> books;
+
+public:
+    void addBook() {
+        int id;
+        string title, author;
+        cout << "\nEnter Book ID: ";
+        cin >> id;
+        cin.ignore(); // flush newline
+        cout << "Enter Title: ";
+        getline(cin, title);
+        cout << "Enter Author: ";
+        getline(cin, author);
+        books.push_back(Book(id, title, author));
+        cout << "Book added successfully!\n";
+    }
+
+    void displayBooks() const {
+        if (books.empty()) {
+            cout << "No books in the library.\n";
+            return;
+        }
+
+        cout << "\nBooks in Library:\n";
+        for (const auto& book : books) {
+            book.displayBook();
+        }
+    }
+
+    void searchBook() const {
+        int id;
+        cout << "Enter Book ID to search: ";
+        cin >> id;
+
+        for (const auto& book : books) {
+            if (book.getBookID() == id) {
+                cout << "Book Found:\n";
+                book.displayBook();
+                return;
+            }
+        }
+        cout << "Book not found.\n";
+    }
+
+    void deleteBook() {
+        int id;
+        cout << "Enter Book ID to delete: ";
+        cin >> id;
+
+        for (auto it = books.begin(); it != books.end(); ++it) {
+            if (it->getBookID() == id) {
+                books.erase(it);
+                cout << "Book deleted successfully.\n";
+                return;
+            }
+        }
+        cout << "Book not found.\n";
+    }
+};
+
+int main() {
+    Library lib;
+    int choice;
+
+    do {
+        cout << "\n===== Library Management System =====\n";
+        cout << "1. Add Book\n";
+        cout << "2. Display All Books\n";
+        cout << "3. Search Book\n";
+        cout << "4. Delete Book\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                lib.addBook();
+                break;
+            case 2:
+                lib.displayBooks();
+                break;
+            case 3:
+                lib.searchBook();
+                break;
+            case 4:
+                lib.deleteBook();
+                break;
+            case 5:
+                cout << "Exiting system. Goodbye!\n";
+                break;
+            default:
+                cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
